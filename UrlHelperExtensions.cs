@@ -24,7 +24,11 @@ namespace Threax.AspNetCore.RazorExt
         public static string AbsoluteContent(this IUrlHelper urlHelper, string contentPath, string scheme = null)
         {
             var request = urlHelper.ActionContext.HttpContext.Request;
-            return new Uri(new Uri(scheme != null ? scheme : request.Scheme + "://" + request.Host.Value), urlHelper.Content(contentPath)).ToString();
+            if(scheme == null)
+            {
+                scheme = request.Scheme;
+            }
+            return new Uri(new Uri($"{scheme}://{request.Host.Value}"), urlHelper.Content(contentPath)).ToString();
         }
     }
 }
